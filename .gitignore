@@ -1,7 +1,7 @@
 # Node / Dependencies
 node_modules/
 backend/node_modules/
-frontend/nextapp/node_modules/
+frontend/node_modules/
 
 # Local Environment Variables & Secrets (CRITICAL)
 .env
@@ -10,15 +10,15 @@ frontend/nextapp/node_modules/
 .env.test.local
 .env.production.local
 backend/.env
-frontend/nextapp/.env.local
+frontend/.env.local
 
 # Next.js Build Outputs & Caches
 .next/
-frontend/nextapp/.next/
+frontend/.next/
 out/
 build/
-frontend/nextapp/out/
-frontend/nextapp/build/
+frontend/out/
+frontend/build/
 
 # Testing & Coverage
 coverage/
