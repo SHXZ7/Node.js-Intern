@@ -1,5 +1,19 @@
-const BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+const getApiBase = () => {
+  if (process.env.NEXT_PUBLIC_API_URL) {
+    return process.env.NEXT_PUBLIC_API_URL;
+  }
+  if (typeof window !== 'undefined') {
+    // Client-side: use relative URL under Vercel multi-service routing prefix
+    return '/_/backend';
+  }
+  // Server-side (SSR / Next.js Server Components):
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}/_/backend`;
+  }
+  return 'http://localhost:3000';
+};
 
+const BASE = getApiBase();
 export interface Profile {
   username: string;
   name: string | null;

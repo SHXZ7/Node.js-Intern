@@ -40,18 +40,56 @@ app.use(
 );
 
 app.use(cors({
-  origin: [
-    'http://localhost:3000',
-    'http://localhost:3001',
-    'http://127.0.0.1:3000',
-    'http://127.0.0.1:3001'
-  ],
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps, curl, or same-origin)
+    if (!origin) return callback(null, true);
+    
+    const allowedOrigins = [
+      'http://localhost:3000',
+      'http://localhost:3001',
+      'http://127.0.0.1:3000',
+      'http://127.0.0.1:3001'
+    ];
+    
+    const isAllowed = allowedOrigins.includes(origin) || 
+                      origin.endsWith('.vercel.app') ||
+                      origin.startsWith('https://vercel.com');
+
+    if (isAllowed) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: ['GET', 'POST', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
 app.use(morgan('dev'));
 app.use(express.json());
+
+// ── Serverless Migrations Middleware ──────────────────────────
+let isMigrated = false;
+let migrationPromise = null;
+
+app.use(async (req, res, next) => {
+  if (!isMigrated) {
+    if (!migrationPromise) {
+      console.log('[DATABASE] Running serverless-safe migration check...');
+      migrationPromise = testConnection()
+        .then(() => {
+          isMigrated = true;
+          console.log('[DATABASE] Serverless migration check successful.');
+        })
+        .catch((err) => {
+          migrationPromise = null; // retry on next request if it failed
+          console.error('[DATABASE ERROR] Serverless migration check failed:', err.message);
+        });
+    }
+    await migrationPromise;
+  }
+  next();
+});
 
 // ── Global Rate Limiter ───────────────────────────────────────
 app.use(apiLimiter);
