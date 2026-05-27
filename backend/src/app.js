@@ -143,16 +143,19 @@ app.use(errorHandler);
 const PORT = process.env.PORT || 3000;
 
 if (process.env.NODE_ENV !== 'test') {
+  // Boot HTTP listener immediately to prevent nodemon crash-loops
+  app.listen(PORT, () => {
+    console.log(`[SERVER] Server running on port ${PORT}`);
+    console.log(`[DOCS]   Swagger UI → http://localhost:${PORT}/api/docs`);
+  });
+
+  // Asynchronously test and bootstrap the database tables
   testConnection()
     .then(() => {
-      app.listen(PORT, () => {
-        console.log(`[SERVER] Server running on port ${PORT}`);
-        console.log(`[DOCS]   Swagger UI → http://localhost:${PORT}/api/docs`);
-      });
+      console.log('[DATABASE] MySQL connection established and schema verified.');
     })
     .catch((err) => {
-      console.error('[SERVER] Bootstrap failed:', err.message);
-      process.exit(1);
+      console.warn('[DATABASE WARNING] MySQL database is unreachable. Server is listening, but database operations will fail until connection parameters are correct.');
     });
 }
 
