@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo:7
+    container_name: gitscope_mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    restart: unless-stopped
+
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: gitscope_api
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./backend/.env
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - mongo
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend/nextapp
+      dockerfile: Dockerfile
+    container_name: gitscope_frontend
+    ports:
+      - "3001:3001"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:3000
+    depends_on:
+      - api
+    restart: unless-stopped
+
+volumes:
+  mongo_data:

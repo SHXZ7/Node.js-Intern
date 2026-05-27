@@ -1,0 +1,29 @@
+{
+  "name": "github-profile-analyzer-api",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand"
+  },
+  "dependencies": {
+    "axios": "^1.6.8",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-rate-limit": "^8.5.2",
+    "express-validator": "^7.0.1",
+    "helmet": "^7.1.0",
+    "morgan": "^1.10.0",
+    "mysql2": "^3.22.4",
+    "swagger-jsdoc": "^6.3.0",
+    "swagger-ui-express": "^5.0.1"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "nodemon": "^3.1.0",
+    "supertest": "^6.3.4"
+  }
+}
