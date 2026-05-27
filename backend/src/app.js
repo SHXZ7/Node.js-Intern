@@ -8,7 +8,7 @@ import { fileURLToPath } from 'url';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJsdoc from 'swagger-jsdoc';
 
-dotenv.config();
+dotenv.config({ override: true });
 
 import profileRoutes from './routes/profileRoutes.js';
 import { errorHandler } from './middleware/errorHandler.js';

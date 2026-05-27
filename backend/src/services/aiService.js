@@ -1,7 +1,7 @@
 import axios from 'axios';
 import dotenv from 'dotenv';
 
-dotenv.config();
+dotenv.config({ override: true });
 
 const GROQ_API_KEY = process.env.GROQ_API_KEY;
 
