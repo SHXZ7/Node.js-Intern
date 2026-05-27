@@ -142,7 +142,9 @@ app.use(errorHandler);
 // ── Server Bootstrap ──────────────────────────────────────────
 const PORT = process.env.PORT || 3000;
 
-if (process.env.NODE_ENV !== 'test') {
+const isVercel = process.env.VERCEL === '1' || process.env.NOW_BUILDER === '1';
+
+if (process.env.NODE_ENV !== 'test' && !isVercel) {
   // Boot HTTP listener immediately to prevent nodemon crash-loops
   app.listen(PORT, () => {
     console.log(`[SERVER] Server running on port ${PORT}`);

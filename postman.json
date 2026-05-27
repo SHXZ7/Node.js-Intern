@@ -1,0 +1,171 @@
+{
+  "info": {
+    "_postman_id": "8b082e6d-2c77-4b7d-bf34-a212260ff0d4",
+    "name": "GitScope - GitHub Profile Analyzer API",
+    "description": "Postman Collection for GitScope GitHub Profile Analyzer API backed by MongoDB Atlas.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{BASE_URL}}/health",
+          "host": [
+            "{{BASE_URL}}"
+          ],
+          "path": [
+            "health"
+          ]
+        },
+        "description": "Check if the GitScope server is running and database connection is operational."
+      },
+      "response": []
+    },
+    {
+      "name": "Analyze Profile (UPSERT)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"octocat\"\n}"
+        },
+        "url": {
+          "raw": "{{BASE_URL}}/api/profiles/analyze",
+          "host": [
+            "{{BASE_URL}}"
+          ],
+          "path": [
+            "api",
+            "profiles",
+            "analyze"
+          ]
+        },
+        "description": "Trigger scanning of a developer profile by username, calculate metrics, and save/update inside MongoDB."
+      },
+      "response": []
+    },
+    {
+      "name": "Get Profile Insights",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{BASE_URL}}/api/profiles/octocat",
+          "host": [
+            "{{BASE_URL}}"
+          ],
+          "path": [
+            "api",
+            "profiles",
+            "octocat"
+          ]
+        },
+        "description": "Retrieve stored statistical insights for a developers profile from the database."
+      },
+      "response": []
+    },
+    {
+      "name": "List Stored Profiles",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{BASE_URL}}/api/profiles?page=1&limit=10&sort=analyzed_at&order=desc",
+          "host": [
+            "{{BASE_URL}}"
+          ],
+          "path": [
+            "api",
+            "profiles"
+          ],
+          "query": [
+            {
+              "key": "page",
+              "value": "1"
+            },
+            {
+              "key": "limit",
+              "value": "10"
+            },
+            {
+              "key": "sort",
+              "value": "analyzed_at",
+              "description": "followers | stars | repos | analyzed_at"
+            },
+            {
+              "key": "order",
+              "value": "desc",
+              "description": "asc | desc"
+            }
+          ]
+        },
+        "description": "Retrieve a list of analyzed profiles sorted by followers, stars, repository counts, or date analyzed."
+      },
+      "response": []
+    },
+    {
+      "name": "Compare Board Insights",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{BASE_URL}}/api/profiles/compare?users=octocat,torvalds",
+          "host": [
+            "{{BASE_URL}}"
+          ],
+          "path": [
+            "api",
+            "profiles",
+            "compare"
+          ],
+          "query": [
+            {
+              "key": "users",
+              "value": "octocat,torvalds",
+              "description": "Comma-separated list of usernames to compare side-by-side"
+            }
+          ]
+        },
+        "description": "Compare metrics, followers, average stars, primary languages, and timelines for multiple developers side-by-side."
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Profile",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{BASE_URL}}/api/profiles/octocat",
+          "host": [
+            "{{BASE_URL}}"
+          ],
+          "path": [
+            "api",
+            "profiles",
+            "octocat"
+          ]
+        },
+        "description": "Remove a developers profile records and insights from the database."
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "BASE_URL",
+      "value": "http://localhost:3000",
+      "type": "string"
+    }
+  ]
+}
